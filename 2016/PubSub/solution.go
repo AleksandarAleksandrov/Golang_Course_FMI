@@ -1,10 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type PubSub struct {
 	publisher   chan string
 	subscribers []chan string
+	mutex       sync.Mutex
 }
 
 func NewPubSub() *PubSub {
@@ -24,7 +28,9 @@ func NewPubSub() *PubSub {
 
 func (ps *PubSub) Subscribe() <-chan string {
 	subCh := make(chan string)
+	ps.mutex.Lock()
 	ps.subscribers = append(ps.subscribers, subCh)
+	ps.mutex.Unlock()
 	return subCh
 }
 
