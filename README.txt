@@ -1,1 +1,1 @@
-none conflict available
+conflict resolved
